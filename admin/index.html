@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Blog admin – Service Bazzar</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css">
+<style>
+:root{--bg:#F3F2F8;--surface:#fff;--ink:#1B1740;--muted:#6A6785;--line:#D9D5E6;--rose:#C2335C;--ok:#1E7B4B;--err:#B3261E;--indigo:#4F46E5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+.bar{display:flex;align-items:center;gap:14px;padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar strong{font-size:1.05rem}
+.bar .sp{flex:1}
+.pill{font-size:.82rem;padding:3px 10px;border-radius:999px;background:#EEE;color:var(--muted)}
+.pill.ok{background:#DDF3E6;color:var(--ok)}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 24px 80px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px;margin-bottom:20px}
+.card h2{margin:0 0 4px;font-size:1.1rem}
+.hint{color:var(--muted);font-size:.88rem;margin:0 0 14px}
+.hint ol{margin:6px 0 0;padding-left:20px}
+.hint code{background:#F0EEF8;padding:1px 5px;border-radius:4px}
+label{font-size:.88rem;color:var(--muted)}
+input[type=text],input[type=password],input[type=date],textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:6px;font:inherit;color:var(--ink);background:#fff}
+input:focus,textarea:focus{outline:2px solid var(--indigo);outline-offset:0;border-color:var(--indigo)}
+input[readonly]{background:#F4F3F9}
+textarea{resize:vertical}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:#fff;padding:8px 16px;color:var(--ink)}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--indigo);border-color:var(--indigo);color:#fff;font-weight:600}
+button.primary:hover{filter:brightness(1.08)}
+button.danger{color:var(--err)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid2 .full{grid-column:1/-1}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.editor{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.row{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;margin-bottom:14px;align-items:start}
+.row>label{padding-top:9px}
+.count{font-size:.8rem;color:var(--muted);margin-top:3px}
+.count.bad{color:var(--err)}
+.imgbox{aspect-ratio:1200/630;background:#EFEFF3;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;color:var(--muted);overflow:hidden;margin-bottom:10px}
+.imgbox img{width:100%;height:100%;object-fit:cover;display:block}
+#editor{height:340px;font-size:16px}
+.ql-toolbar{border-radius:6px 6px 0 0}.ql-container{border-radius:0 0 6px 6px}
+#src{display:none;height:340px;font-family:Consolas,monospace;font-size:13px;border-radius:0 0 6px 6px}
+.srcbtn{margin-top:6px;font-size:.85rem;padding:4px 10px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--line)}
+#log{margin-top:16px;font-size:.9rem}
+#log div{padding:6px 10px;border-radius:5px;margin-bottom:4px;background:#fff;border:1px solid var(--line)}
+#log .ok{border-color:#9ED5B5;background:#EEF9F2;color:var(--ok)}
+#log .err{border-color:#E5A8A3;background:#FDF0EF;color:var(--err)}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.82rem;color:var(--muted);font-weight:600}
+td .a{display:flex;gap:6px;flex-wrap:wrap}
+td button,td a.b{padding:4px 10px;font-size:.85rem;text-decoration:none;border:1px solid var(--line);border-radius:6px;color:var(--ink);background:#fff}
+@media (max-width:900px){.editor{grid-template-columns:1fr}.row{grid-template-columns:1fr}.row>label{padding-top:0}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bar"><strong>Service Bazzar · Blog admin</strong><span id="status" class="pill">Not connected</span><span class="sp"></span><button id="btn-conn" type="button">Connection settings</button></div>
+<div class="wrap">
+
+<section id="connect" class="card" hidden>
+  <h2>Connect to GitHub (one time)</h2>
+  <div class="hint">This page saves posts straight into your GitHub repo, so it needs a personal access token. Only you can publish with it. To create one:
+    <ol>
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a></li>
+      <li>Name: <code>blog admin</code>. Expiration: 1 year (or what you like).</li>
+      <li>Repository access: <b>Only select repositories</b> → choose <code>servicebazzar09</code>.</li>
+      <li>Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>
+      <li>Click <b>Generate token</b>, copy it, paste below.</li>
+    </ol>
+  </div>
+  <div class="grid2">
+    <div class="full"><label for="c-token">Token</label><input id="c-token" type="password" autocomplete="off" placeholder="github_pat_..."></div>
+    <div><label for="c-owner">GitHub username</label><input id="c-owner" type="text"></div>
+    <div><label for="c-repo">Repository name</label><input id="c-repo" type="text"></div>
+    <div><label for="c-branch">Branch</label><input id="c-branch" type="text"></div>
+    <div><label for="c-site">Site URL (leave empty for the default)</label><input id="c-site" type="text" placeholder="https://servicebazzar09.github.io/servicebazzar09/"></div>
+  </div>
+  <div class="actions"><button id="c-save" class="primary" type="button">Save and test</button><button id="c-clear" type="button" class="danger">Disconnect (remove token from this browser)</button></div>
+  <p class="hint" style="margin-top:10px">The token stays only in this browser. Don't use this page on a shared computer.</p>
+</section>
+
+<div class="tabs"><button type="button" data-tab="edit" class="on">Write post</button><button type="button" data-tab="list">All posts</button></div>
+
+<section id="tab-edit">
+  <div class="card">
+    <div class="editor">
+      <div>
+        <div class="row"><label for="f-title">Title</label><div><input id="f-title" type="text"></div></div>
+        <div class="row"><label for="f-sub">Sub title</label><div><input id="f-sub" type="text"></div></div>
+        <div class="row"><label for="f-slug">URL name</label><div><input id="f-slug" type="text" placeholder="auto-from-title"><div class="count" id="slug-note"></div></div></div>
+        <div class="row"><label>Content</label><div>
+          <div id="editor"></div><textarea id="src" spellcheck="false"></textarea>
+          <button id="btn-src" class="srcbtn" type="button">&lt;/&gt; HTML view</button>
+        </div></div>
+        <div class="row"><label for="f-mt">Meta title</label><div><input id="f-mt" type="text"><div class="count" id="mt-c"></div></div></div>
+        <div class="row"><label for="f-mk">Meta keywords</label><div><textarea id="f-mk" rows="3" placeholder="comma, separated, keywords"></textarea></div></div>
+        <div class="row"><label for="f-md">Meta description</label><div><textarea id="f-md" rows="3"></textarea><div class="count" id="md-c"></div></div></div>
+        <div class="row"><label for="f-au">Author name</label><div><input id="f-au" type="text"></div></div>
+        <div class="row"><label for="f-ad">Author designation</label><div><input id="f-ad" type="text"></div></div>
+        <div class="row"><label for="f-dt">Publish date</label><div><input id="f-dt" type="date"></div></div>
+      </div>
+      <div>
+        <div class="imgbox" id="imgbox">no image</div>
+        <input id="f-img" type="file" accept="image/*" hidden>
+        <button id="btn-img" type="button" style="width:100%">Upload image</button>
+        <p class="hint" style="margin:6px 0 10px">Image will be resized to 1200×630.</p>
+        <label for="f-alt">Image alt text</label><input id="f-alt" type="text" placeholder="Short description of the image">
+        <button id="btn-noimg" type="button" style="margin-top:8px;font-size:.85rem" class="danger">Remove image</button>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="btn-pub" class="primary" type="button">Publish</button>
+      <button id="btn-new" type="button">Clear / new post</button>
+      <span id="mode" class="pill">New post</span>
+    </div>
+  </div>
+</section>
+
+<section id="tab-list" hidden>
+  <div class="card"><h2>All posts</h2><p class="hint">Edit or delete the posts you published.</p>
+    <table><thead><tr><th>Title</th><th>Date</th><th></th></tr></thead><tbody id="rows"><tr><td colspan="3">Loading…</td></tr></tbody></table>
+  </div>
+</section>
+
+<div id="log"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const MAIN='https://www.servicebazzar.com/';
+const LS='sb_admin_cfg';
+let cfg=Object.assign({owner:'servicebazzar09',repo:'servicebazzar09',branch:'main',token:'',site:''},JSON.parse(localStorage.getItem(LS)||'null')||{});
+
+//#PURE-START
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function siteUrl(){
+  if(cfg.site) return cfg.site.replace(/\/?$/,'/');
+  return cfg.repo.toLowerCase()===(cfg.owner+'.github.io').toLowerCase()?`https://${cfg.owner}.github.io/`:`https://${cfg.owner}.github.io/${cfg.repo}/`;
+}
+function slugify(t){return String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)}
+function fmtDate(d){try{return new Date(d+'T00:00:00Z').toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'})}catch(e){return d}}
+function plain(html){return html.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim()}
+const FONTS='<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">';
+function ld(o){return '<script type="application/ld+json">\n'+JSON.stringify(o,null,2).replace(/</g,'\\u003c')+'\n<\/script>'}
+function shell(head,body){
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+${head}
+${FONTS}
+<link rel="stylesheet" href="../assets/blog.css">
+</head>
+<body>
+<div class="wrap">
+<header class="top"><a class="brand" href="../">Service<i>Bazzar</i></a><nav class="topnav"><a href="./">Blog</a><a class="cta" href="${MAIN}">Visit website</a></nav></header>
+${body}
+<footer><div class="row"><span>© Service Bazzar</span><nav><a href="../">Home</a> &nbsp;·&nbsp; <a href="./">Blog</a> &nbsp;·&nbsp; <a href="${MAIN}">servicebazzar.com</a></nav></div></footer>
+</div>
+</body>
+</html>
+`;
+}
+function postHTML(p){
+  const S=siteUrl(), url=S+'blog/'+p.slug+'.html';
+  const title=p.metaTitle||p.title;
+  const desc=p.metaDescription||plain(p.content).slice(0,155);
+  const img=p.image?S+p.image:'';
+  const schema={"@context":"https://schema.org","@type":"BlogPosting","headline":p.title,"description":desc,"datePublished":p.date,"dateModified":p.updated||p.date,"mainEntityOfPage":url,"author":{"@type":"Person","name":p.author||"Service Bazzar"},"publisher":{"@type":"Organization","name":"Service Bazzar","url":MAIN}};
+  if(img) schema.image=img;
+  if(p.author&&p.designation) schema.author.jobTitle=p.designation;
+  const head=`<title>${esc(title)}</title>
+<meta name="description" content="${esc(desc)}">
+${p.metaKeywords?`<meta name="keywords" content="${esc(p.metaKeywords)}">\n`:''}<link rel="canonical" href="${esc(url)}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${esc(url)}">
+${img?`<meta property="og:image" content="${esc(img)}">\n`:''}<meta name="twitter:card" content="${img?'summary_large_image':'summary'}">
+${ld(schema)}`;
+  const by=[p.author?`By <strong>${esc(p.author)}</strong>`:'',p.designation?esc(p.designation):''].filter(Boolean).join(', ');
+  const body=`<main><article class="post">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a> / <a href="./">Blog</a></nav>
+<h1>${esc(p.title)}</h1>
+${p.subtitle?`<p class="sub">${esc(p.subtitle)}</p>\n`:''}<p class="byline">${by}${by?' · ':''}<time datetime="${esc(p.date)}">${esc(fmtDate(p.date))}</time></p>
+${p.image?`<figure><img src="../${esc(p.image)}" alt="${esc(p.imageAlt||p.title)}" width="1200" height="630"></figure>\n`:''}<div class="content">
+${p.content}
+</div>
+<aside class="cta-box"><h2>Looking for local businesses in Jaipur?</h2><p>Browse shops, clinics, institutes and service providers by category on Service Bazzar.</p><a class="btn" href="${MAIN}">Visit Service Bazzar</a></aside>
+</article></main>`;
+  return shell(head,body);
+}
+function listHTML(posts){
+  const S=siteUrl(), url=S+'blog/';
+  const head=`<title>Blog – Service Bazzar</title>
+<meta name="description" content="Articles from Service Bazzar about local businesses and services in Jaipur.">
+<link rel="canonical" href="${esc(url)}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog – Service Bazzar">
+<meta property="og:url" content="${esc(url)}">`;
+  const cards=posts.map(p=>`<li><a class="card" href="${esc(p.slug)}.html"><div class="thumb">${p.image?`<img src="../${esc(p.image)}" alt="${esc(p.imageAlt||p.title)}" loading="lazy">`:'📝'}</div><div class="body"><h2>${esc(p.title)}</h2><p>${esc(p.subtitle||p.description||'')}</p><time datetime="${esc(p.date)}">${esc(fmtDate(p.date))}</time></div></a></li>`).join('\n');
+  const body=`<main>
+<div class="blog-head"><h1>Blog</h1><p>Articles about local businesses and services in Jaipur.</p></div>
+${posts.length?`<ul class="posts">\n${cards}\n</ul>`:'<p class="empty">No articles yet. The first one will appear here soon.</p>'}
+</main>`;
+  return shell(head,body);
+}
+function sitemapXML(posts){
+  const S=siteUrl();
+  const u=(loc,d)=>`  <url><loc>${esc(loc)}</loc>${d?`<lastmod>${esc(d)}</lastmod>`:''}</url>`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[u(S),u(S+'blog/')].concat(posts.map(p=>u(S+'blog/'+p.slug+'.html',p.updated||p.date))).join('\n')}\n</urlset>\n`;
+}
+//#PURE-END
+
+/* ---------- GitHub API ---------- */
+const H=()=>({'Authorization':'Bearer '+cfg.token,'Accept':'application/vnd.github+json'});
+const API=()=>`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/`;
+async function errOf(r){let m='';try{m=(await r.json()).message}catch(e){}
+  if(r.status===401) return 'Token is not valid or has expired. Create a new token and save it in Connection settings.';
+  if(r.status===403||r.status===404) return `GitHub refused this (${r.status}). Check that the token has "Contents: Read and write" for repo ${cfg.owner}/${cfg.repo}. ${m}`;
+  return `GitHub error ${r.status}: ${m}`}
+async function ghGet(path){const r=await fetch(API()+path+'?ref='+encodeURIComponent(cfg.branch),{headers:H(),cache:'no-store'});if(r.status===404)return null;if(!r.ok)throw new Error(await errOf(r));return r.json()}
+async function ghPut(path,b64,msg){const ex=await ghGet(path);const body={message:msg,content:b64,branch:cfg.branch};if(ex&&ex.sha)body.sha=ex.sha;
+  const r=await fetch(API()+path,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},H()),body:JSON.stringify(body)});if(!r.ok)throw new Error(await errOf(r))}
+async function ghDel(path,msg){const ex=await ghGet(path);if(!ex)return;
+  const r=await fetch(API()+path,{method:'DELETE',headers:Object.assign({'Content-Type':'application/json'},H()),body:JSON.stringify({message:msg,sha:ex.sha,branch:cfg.branch})});if(!r.ok)throw new Error(await errOf(r))}
+const toB64=s=>{const b=new TextEncoder().encode(s);let bin='';b.forEach(x=>bin+=String.fromCharCode(x));return btoa(bin)};
+const fromB64=b=>new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')),c=>c.charCodeAt(0)));
+async function readJSON(path,def){const f=await ghGet(path);return f?JSON.parse(fromB64(f.content)):def}
+const blobB64=b=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(b)});
+
+/* ---------- images ---------- */
+function loadImg(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),i=new Image();i.onload=()=>{URL.revokeObjectURL(u);res(i)};i.onerror=rej;i.src=u})}
+async function resize(file,W,H2,crop){
+  const img=await loadImg(file);let w,h,sx=0,sy=0,sw=img.width,sh=img.height;
+  if(crop){w=W;h=H2;const k=Math.max(W/img.width,H2/img.height);sw=W/k;sh=H2/k;sx=(img.width-sw)/2;sy=(img.height-sh)/2}
+  else{const k=Math.min(1,W/img.width);w=Math.round(img.width*k);h=Math.round(img.height*k)}
+  const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,sx,sy,sw,sh,0,0,w,h);
+  return new Promise(res=>c.toBlob(res,'image/jpeg',.85));
+}
+
+/* ---------- UI helpers ---------- */
+function log(msg,cls){const d=document.createElement('div');if(cls)d.className=cls;d.textContent=msg;$('#log').appendChild(d);d.scrollIntoView({block:'nearest'});return d}
+function clearLog(){$('#log').innerHTML=''}
+function needToken(){if(!cfg.token){log('Connect to GitHub first (Connection settings).','err');$('#connect').hidden=false;return true}return false}
+function setStatus(){const s=$('#status');if(cfg.token){s.textContent='Connected: '+cfg.owner+'/'+cfg.repo;s.className='pill ok'}else{s.textContent='Not connected';s.className='pill'}}
+
+/* ---------- connection ---------- */
+function fillConn(){$('#c-token').value=cfg.token;$('#c-owner').value=cfg.owner;$('#c-repo').value=cfg.repo;$('#c-branch').value=cfg.branch;$('#c-site').value=cfg.site}
+$('#btn-conn').onclick=()=>{fillConn();$('#connect').hidden=!$('#connect').hidden};
+$('#c-save').onclick=async()=>{
+  cfg={token:$('#c-token').value.trim(),owner:$('#c-owner').value.trim(),repo:$('#c-repo').value.trim(),branch:$('#c-branch').value.trim()||'main',site:$('#c-site').value.trim()};
+  clearLog();
+  try{
+    const r=await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}`,{headers:H(),cache:'no-store'});
+    if(!r.ok) throw new Error(await errOf(r));
+    localStorage.setItem(LS,JSON.stringify(cfg));setStatus();$('#connect').hidden=true;log('Connected to '+cfg.owner+'/'+cfg.repo+'. You can write posts now.','ok');loadList();
+  }catch(e){log(e.message,'err')}
+};
+$('#c-clear').onclick=()=>{localStorage.removeItem(LS);cfg.token='';fillConn();setStatus();log('Token removed from this browser.','ok')};
+
+/* ---------- editor ---------- */
+let editing=null,slugTouched=false,pendingImg=null,currentImage='',srcMode=false;
+async function insertImage(){
+  if(needToken())return;
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
+    try{const l=log('Uploading image…');const b=await resize(f,1200,0,false);const path=`blog/images/inline-${Date.now().toString(36)}.jpg`;
+      await ghPut(path,await blobB64(b),'Blog: add image');l.textContent='Image uploaded.';l.className='ok';
+      const rg=quill.getSelection(true);quill.insertEmbed(rg.index,'image',siteUrl()+path);quill.setSelection(rg.index+1);
+    }catch(e){log(e.message,'err')}};
+  inp.click();
+}
+const quill=new Quill('#editor',{theme:'snow',placeholder:'Write your blog here…',modules:{toolbar:{container:[[{header:[2,3,false]}],['bold','italic','underline'],['blockquote'],[{list:'ordered'},{list:'bullet'}],[{align:[]}],['link','image'],['clean']],handlers:{image:insertImage}}}});
+$('#btn-src').onclick=()=>{
+  if(!srcMode){$('#src').value=quill.root.innerHTML;$('#src').style.display='block';$('#editor').parentNode.querySelector('.ql-toolbar').style.display='none';$('#editor').style.display='none';srcMode=true}
+  else{quill.clipboard.dangerouslyPasteHTML($('#src').value);$('#src').style.display='none';$('#editor').parentNode.querySelector('.ql-toolbar').style.display='';$('#editor').style.display='';srcMode=false}
+};
+function getContent(){if(srcMode)return $('#src').value.trim();const empty=quill.getText().trim()===''&&!quill.root.querySelector('img');return empty?'':quill.root.innerHTML}
+function counters(){
+  const mt=$('#f-mt').value.length,md=$('#f-md').value.length;
+  $('#mt-c').textContent=mt+' characters (aim for 60 or fewer)';$('#mt-c').className='count'+(mt>60?' bad':'');
+  $('#md-c').textContent=md+' characters (aim for 120 to 160)';$('#md-c').className='count'+(md>160?' bad':'');
+}
+['#f-mt','#f-md'].forEach(s=>$(s).addEventListener('input',counters));
+$('#f-title').addEventListener('input',()=>{if(!editing&&!slugTouched)$('#f-slug').value=slugify($('#f-title').value)});
+$('#f-slug').addEventListener('input',()=>{slugTouched=true});
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+function showImg(src){$('#imgbox').innerHTML=src?`<img alt="" src="${esc(src)}">`:'no image'}
+$('#btn-img').onclick=()=>$('#f-img').click();
+$('#f-img').onchange=async()=>{const f=$('#f-img').files[0];if(!f)return;pendingImg=await resize(f,1200,630,true);showImg(URL.createObjectURL(pendingImg))};
+$('#btn-noimg').onclick=()=>{pendingImg=null;currentImage='';$('#f-img').value='';showImg('')};
+function resetForm(){
+  editing=null;slugTouched=false;pendingImg=null;currentImage='';
+  ['#f-title','#f-sub','#f-slug','#f-mt','#f-mk','#f-md','#f-alt'].forEach(s=>$(s).value='');
+  $('#f-au').value=localStorage.getItem('sb_author')||'';$('#f-ad').value=localStorage.getItem('sb_designation')||'';$('#f-dt').value=today();
+  $('#f-slug').readOnly=false;$('#slug-note').textContent='';quill.setContents([]);if(srcMode)$('#btn-src').click();
+  showImg('');$('#f-img').value='';$('#mode').textContent='New post';$('#btn-pub').textContent='Publish';counters();
+}
+$('#btn-new').onclick=()=>{resetForm();clearLog()};
+
+/* ---------- publish ---------- */
+async function rebuildIndexes(posts,msg){
+  await ghPut('blog/posts.json',toB64(JSON.stringify(posts,null,2)),msg);
+  await ghPut('blog/index.html',toB64(listHTML(posts)),msg);
+  await ghPut('sitemap.xml',toB64(sitemapXML(posts)),msg);
+}
+$('#btn-pub').onclick=async()=>{
+  clearLog();if(needToken())return;
+  const f={title:$('#f-title').value.trim(),subtitle:$('#f-sub').value.trim(),slug:slugify($('#f-slug').value)||slugify($('#f-title').value),content:getContent(),
+    metaTitle:$('#f-mt').value.trim(),metaKeywords:$('#f-mk').value.trim(),metaDescription:$('#f-md').value.trim(),
+    author:$('#f-au').value.trim(),designation:$('#f-ad').value.trim(),imageAlt:$('#f-alt').value.trim(),date:$('#f-dt').value||today()};
+  if(!f.title){log('Title is required.','err');return}
+  if(!f.content){log('Content is empty.','err');return}
+  if(!f.slug)f.slug='post-'+Date.now().toString(36);
+  const btn=$('#btn-pub');btn.disabled=true;
+  try{
+    let posts=await readJSON('blog/posts.json',[]);
+    if(!editing&&posts.some(p=>p.slug===f.slug)) throw new Error('A post with this URL name already exists. Change the URL name or edit that post from "All posts".');
+    f.image=currentImage;
+    if(pendingImg){const l=log('Uploading image…');f.image=`blog/images/${f.slug}-${Date.now().toString(36)}.jpg`;await ghPut(f.image,await blobB64(pendingImg),'Blog: image for '+f.slug);l.textContent='Image uploaded.';l.className='ok'}
+    if(!f.metaDescription)f.metaDescription=plain(f.content).slice(0,155);
+    f.updated=today();
+    const msg=(editing?'Blog: update ':'Blog: publish ')+f.slug;
+    log('Saving post…');
+    await ghPut(`blog/data/${f.slug}.json`,toB64(JSON.stringify(f,null,2)),msg);
+    await ghPut(`blog/${f.slug}.html`,toB64(postHTML(f)),msg);
+    posts=posts.filter(p=>p.slug!==f.slug);
+    posts.push({slug:f.slug,title:f.title,subtitle:f.subtitle,description:f.metaDescription,image:f.image,imageAlt:f.imageAlt,date:f.date,updated:f.updated,author:f.author});
+    posts.sort((a,b)=>b.date.localeCompare(a.date));
+    log('Updating blog page and sitemap…');
+    await rebuildIndexes(posts,msg);
+    localStorage.setItem('sb_author',f.author);localStorage.setItem('sb_designation',f.designation);
+    const url=siteUrl()+'blog/'+f.slug+'.html';
+    log('Published. It goes live in 1 to 2 minutes: '+url,'ok');
+    editing=f.slug;currentImage=f.image;pendingImg=null;$('#f-slug').value=f.slug;$('#f-slug').readOnly=true;$('#mode').textContent='Editing: '+f.slug;$('#btn-pub').textContent='Update';
+    loadList();
+  }catch(e){log(e.message,'err')}
+  btn.disabled=false;
+};
+
+/* ---------- list / edit / delete ---------- */
+async function loadList(){
+  if(!cfg.token){$('#rows').innerHTML='<tr><td colspan="3">Connect to GitHub to see your posts.</td></tr>';return}
+  try{
+    const posts=await readJSON('blog/posts.json',[]);
+    $('#rows').innerHTML=posts.length?'':'<tr><td colspan="3">No posts yet.</td></tr>';
+    posts.forEach(p=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${esc(p.title)}<div class="count">${esc(p.slug)}.html</div></td><td>${esc(p.date)}</td><td><div class="a"><button type="button" data-e="${esc(p.slug)}">Edit</button><a class="b" target="_blank" rel="noopener" href="${esc(siteUrl()+'blog/'+p.slug+'.html')}">View</a><button type="button" class="danger" data-d="${esc(p.slug)}">Delete</button></div></td>`;
+      $('#rows').appendChild(tr);
+    });
+  }catch(e){$('#rows').innerHTML='<tr><td colspan="3">'+esc(e.message)+'</td></tr>'}
+}
+$('#rows').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;clearLog();
+  if(b.dataset.e){
+    try{const p=await readJSON(`blog/data/${b.dataset.e}.json`,null);if(!p)throw new Error('Post data not found.');
+      resetForm();editing=p.slug;
+      $('#f-title').value=p.title||'';$('#f-sub').value=p.subtitle||'';$('#f-slug').value=p.slug;$('#f-slug').readOnly=true;$('#slug-note').textContent='The URL name cannot change after publishing.';
+      quill.clipboard.dangerouslyPasteHTML(p.content||'');
+      $('#f-mt').value=p.metaTitle||'';$('#f-mk').value=p.metaKeywords||'';$('#f-md').value=p.metaDescription||'';$('#f-au').value=p.author||'';$('#f-ad').value=p.designation||'';$('#f-dt').value=p.date||today();$('#f-alt').value=p.imageAlt||'';
+      currentImage=p.image||'';showImg(currentImage?siteUrl()+currentImage:'');
+      $('#mode').textContent='Editing: '+p.slug;$('#btn-pub').textContent='Update';counters();showTab('edit');
+    }catch(err){log(err.message,'err')}
+  }
+  if(b.dataset.d){
+    const s=b.dataset.d;if(!confirm('Delete "'+s+'"? This removes the page from your site.'))return;
+    try{
+      let posts=await readJSON('blog/posts.json',[]);const p=posts.find(x=>x.slug===s);
+      await ghDel(`blog/${s}.html`,'Blog: delete '+s);await ghDel(`blog/data/${s}.json`,'Blog: delete '+s);
+      if(p&&p.image)await ghDel(p.image,'Blog: delete image of '+s);
+      posts=posts.filter(x=>x.slug!==s);await rebuildIndexes(posts,'Blog: delete '+s);
+      log('Deleted '+s+'.','ok');if(editing===s)resetForm();loadList();
+    }catch(err){log(err.message,'err')}
+  }
+});
+
+/* ---------- tabs / start ---------- */
+function showTab(t){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));$('#tab-edit').hidden=t!=='edit';$('#tab-list').hidden=t!=='list';if(t==='list')loadList()}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+setStatus();fillConn();resetForm();
+if(!cfg.token)$('#connect').hidden=false;else loadList();
+</script>
+</body>
+</html>
