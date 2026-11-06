@@ -36,6 +36,11 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .content li{margin-bottom:6px}
 .content blockquote{margin:22px 0;padding:6px 0 6px 20px;border-left:4px solid var(--rose);color:var(--muted)}
 .content img{max-width:100%;height:auto;border-radius:12px}
+.content .table-wrap{overflow-x:auto;margin:0 0 22px;-webkit-overflow-scrolling:touch}
+.content table{border-collapse:collapse;width:100%;min-width:460px;font-size:.97rem;line-height:1.5}
+.content th,.content td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.content th{background:var(--indigo-soft)}
+.content td p,.content th p{margin:0}
 .content .ql-align-center{text-align:center}.content .ql-align-right{text-align:right}.content .ql-align-justify{text-align:justify}
 .cta-box{margin-top:44px;padding:28px;background:var(--surface);border:1px solid var(--line);border-radius:22px 22px 6px 6px}
 .cta-box h2{font-family:var(--head);font-size:1.35rem;margin:0 0 6px}
