@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Blog admin – Service Bazzar</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
 <style>
 :root{--bg:#F3F2F8;--surface:#fff;--ink:#1B1740;--muted:#6A6785;--line:#D9D5E6;--rose:#C2335C;--ok:#1E7B4B;--err:#B3261E;--indigo:#4F46E5}
 *{box-sizing:border-box}
@@ -43,10 +43,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .count.bad{color:var(--err)}
 .imgbox{aspect-ratio:1200/630;background:#EFEFF3;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;color:var(--muted);overflow:hidden;margin-bottom:10px}
 .imgbox img{width:100%;height:100%;object-fit:cover;display:block}
-#editor{height:340px;font-size:16px}
-.ql-toolbar{border-radius:6px 6px 0 0}.ql-container{border-radius:0 0 6px 6px}
-#src{display:none;height:340px;font-family:Consolas,monospace;font-size:13px;border-radius:0 0 6px 6px}
-.srcbtn{margin-top:6px;font-size:.85rem;padding:4px 10px}
+.note-editor.note-frame{border-color:var(--line);border-radius:6px}
+.note-editable{font-size:16px;line-height:1.6}
+.note-editable table{border-collapse:collapse;width:100%}
+.note-editable table td,.note-editable table th{border:1px solid #BBB;padding:6px 8px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--line)}
 #log{margin-top:16px;font-size:.9rem}
 #log div{padding:6px 10px;border-radius:5px;margin-bottom:4px;background:#fff;border:1px solid var(--line)}
@@ -96,8 +96,8 @@ td button,td a.b{padding:4px 10px;font-size:.85rem;text-decoration:none;border:1
         <div class="row"><label for="f-sub">Sub title</label><div><input id="f-sub" type="text"></div></div>
         <div class="row"><label for="f-slug">URL name</label><div><input id="f-slug" type="text" placeholder="auto-from-title"><div class="count" id="slug-note"></div></div></div>
         <div class="row"><label>Content</label><div>
-          <div id="editor"></div><textarea id="src" spellcheck="false"></textarea>
-          <button id="btn-src" class="srcbtn" type="button">&lt;/&gt; HTML view</button>
+          <div id="editor"></div>
+          <div class="count">Tip: paste a table from Word, Excel or a website and it stays a table. You can also use the table button.</div>
         </div></div>
         <div class="row"><label for="f-mt">Meta title</label><div><input id="f-mt" type="text"><div class="count" id="mt-c"></div></div></div>
         <div class="row"><label for="f-mk">Meta keywords</label><div><textarea id="f-mk" rows="3" placeholder="comma, separated, keywords"></textarea></div></div>
@@ -132,9 +132,10 @@ td button,td a.b{padding:4px 10px;font-size:.85rem;text-decoration:none;border:1
 <div id="log"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <script>
-const $=s=>document.querySelector(s);
+const Q=s=>document.querySelector(s);
 const MAIN='https://www.servicebazzar.com/';
 const LS='sb_admin_cfg';
 let cfg=Object.assign({owner:'servicebazzar09',repo:'servicebazzar09',branch:'main',token:'',site:''},JSON.parse(localStorage.getItem(LS)||'null')||{});
@@ -249,64 +250,73 @@ async function resize(file,W,H2,crop){
 }
 
 /* ---------- UI helpers ---------- */
-function log(msg,cls){const d=document.createElement('div');if(cls)d.className=cls;d.textContent=msg;$('#log').appendChild(d);d.scrollIntoView({block:'nearest'});return d}
-function clearLog(){$('#log').innerHTML=''}
-function needToken(){if(!cfg.token){log('Connect to GitHub first (Connection settings).','err');$('#connect').hidden=false;return true}return false}
-function setStatus(){const s=$('#status');if(cfg.token){s.textContent='Connected: '+cfg.owner+'/'+cfg.repo;s.className='pill ok'}else{s.textContent='Not connected';s.className='pill'}}
+function log(msg,cls){const d=document.createElement('div');if(cls)d.className=cls;d.textContent=msg;Q('#log').appendChild(d);d.scrollIntoView({block:'nearest'});return d}
+function clearLog(){Q('#log').innerHTML=''}
+function needToken(){if(!cfg.token){log('Connect to GitHub first (Connection settings).','err');Q('#connect').hidden=false;return true}return false}
+function setStatus(){const s=Q('#status');if(cfg.token){s.textContent='Connected: '+cfg.owner+'/'+cfg.repo;s.className='pill ok'}else{s.textContent='Not connected';s.className='pill'}}
 
 /* ---------- connection ---------- */
-function fillConn(){$('#c-token').value=cfg.token;$('#c-owner').value=cfg.owner;$('#c-repo').value=cfg.repo;$('#c-branch').value=cfg.branch;$('#c-site').value=cfg.site}
-$('#btn-conn').onclick=()=>{fillConn();$('#connect').hidden=!$('#connect').hidden};
-$('#c-save').onclick=async()=>{
-  cfg={token:$('#c-token').value.trim(),owner:$('#c-owner').value.trim(),repo:$('#c-repo').value.trim(),branch:$('#c-branch').value.trim()||'main',site:$('#c-site').value.trim()};
+function fillConn(){Q('#c-token').value=cfg.token;Q('#c-owner').value=cfg.owner;Q('#c-repo').value=cfg.repo;Q('#c-branch').value=cfg.branch;Q('#c-site').value=cfg.site}
+Q('#btn-conn').onclick=()=>{fillConn();Q('#connect').hidden=!Q('#connect').hidden};
+Q('#c-save').onclick=async()=>{
+  cfg={token:Q('#c-token').value.trim(),owner:Q('#c-owner').value.trim(),repo:Q('#c-repo').value.trim(),branch:Q('#c-branch').value.trim()||'main',site:Q('#c-site').value.trim()};
   clearLog();
   try{
     const r=await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}`,{headers:H(),cache:'no-store'});
     if(!r.ok) throw new Error(await errOf(r));
-    localStorage.setItem(LS,JSON.stringify(cfg));setStatus();$('#connect').hidden=true;log('Connected to '+cfg.owner+'/'+cfg.repo+'. You can write posts now.','ok');loadList();
+    localStorage.setItem(LS,JSON.stringify(cfg));setStatus();Q('#connect').hidden=true;log('Connected to '+cfg.owner+'/'+cfg.repo+'. You can write posts now.','ok');loadList();
   }catch(e){log(e.message,'err')}
 };
-$('#c-clear').onclick=()=>{localStorage.removeItem(LS);cfg.token='';fillConn();setStatus();log('Token removed from this browser.','ok')};
+Q('#c-clear').onclick=()=>{localStorage.removeItem(LS);cfg.token='';fillConn();setStatus();log('Token removed from this browser.','ok')};
 
 /* ---------- editor ---------- */
-let editing=null,slugTouched=false,pendingImg=null,currentImage='',srcMode=false;
-async function insertImage(){
+let editing=null,slugTouched=false,pendingImg=null,currentImage='';
+const ED=()=>jQuery('#editor');
+async function uploadInline(files){
   if(needToken())return;
-  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
-  inp.onchange=async()=>{const f=inp.files[0];if(!f)return;
+  for(const f of files){
     try{const l=log('Uploading image…');const b=await resize(f,1200,0,false);const path=`blog/images/inline-${Date.now().toString(36)}.jpg`;
       await ghPut(path,await blobB64(b),'Blog: add image');l.textContent='Image uploaded.';l.className='ok';
-      const rg=quill.getSelection(true);quill.insertEmbed(rg.index,'image',siteUrl()+path);quill.setSelection(rg.index+1);
-    }catch(e){log(e.message,'err')}};
-  inp.click();
+      ED().summernote('insertImage',siteUrl()+path);
+    }catch(e){log(e.message,'err')}
+  }
 }
-const quill=new Quill('#editor',{theme:'snow',placeholder:'Write your blog here…',modules:{toolbar:{container:[[{header:[2,3,false]}],['bold','italic','underline'],['blockquote'],[{list:'ordered'},{list:'bullet'}],[{align:[]}],['link','image'],['clean']],handlers:{image:insertImage}}}});
-$('#btn-src').onclick=()=>{
-  if(!srcMode){$('#src').value=quill.root.innerHTML;$('#src').style.display='block';$('#editor').parentNode.querySelector('.ql-toolbar').style.display='none';$('#editor').style.display='none';srcMode=true}
-  else{quill.clipboard.dangerouslyPasteHTML($('#src').value);$('#src').style.display='none';$('#editor').parentNode.querySelector('.ql-toolbar').style.display='';$('#editor').style.display='';srcMode=false}
-};
-function getContent(){if(srcMode)return $('#src').value.trim();const empty=quill.getText().trim()===''&&!quill.root.querySelector('img');return empty?'':quill.root.innerHTML}
+ED().summernote({height:340,placeholder:'Write your blog here…',
+  toolbar:[['style',['style']],['font',['bold','italic','underline','clear']],['para',['ul','ol','paragraph']],['insert',['link','picture','table','hr']],['view',['fullscreen','codeview']]],
+  styleTags:['p','h2','h3','blockquote'],
+  callbacks:{onImageUpload:uploadInline}});
+// strips pasted styling from tables (Word/Excel/websites) and wraps each in a scrolling box
+function cleanHTML(html){
+  const doc=new DOMParser().parseFromString('<div id="r">'+html+'</div>','text/html');const r=doc.getElementById('r');
+  r.querySelectorAll('table').forEach(t=>{
+    ['style','width','height','class','border','cellpadding','cellspacing','bgcolor','align'].forEach(a=>t.removeAttribute(a));
+    t.querySelectorAll('*').forEach(n=>['style','width','height','class','bgcolor','align','valign','nowrap'].forEach(a=>n.removeAttribute(a)));
+    if(!(t.parentElement&&t.parentElement.classList.contains('table-wrap'))){const w=doc.createElement('div');w.className='table-wrap';t.parentNode.insertBefore(w,t);w.appendChild(t)}
+  });
+  return r.innerHTML;
+}
+function getContent(){const c=ED().summernote('isEmpty')?'':ED().summernote('code').trim();return c?cleanHTML(c):''}
 function counters(){
-  const mt=$('#f-mt').value.length,md=$('#f-md').value.length;
-  $('#mt-c').textContent=mt+' characters (aim for 60 or fewer)';$('#mt-c').className='count'+(mt>60?' bad':'');
-  $('#md-c').textContent=md+' characters (aim for 120 to 160)';$('#md-c').className='count'+(md>160?' bad':'');
+  const mt=Q('#f-mt').value.length,md=Q('#f-md').value.length;
+  Q('#mt-c').textContent=mt+' characters (aim for 60 or fewer)';Q('#mt-c').className='count'+(mt>60?' bad':'');
+  Q('#md-c').textContent=md+' characters (aim for 120 to 160)';Q('#md-c').className='count'+(md>160?' bad':'');
 }
-['#f-mt','#f-md'].forEach(s=>$(s).addEventListener('input',counters));
-$('#f-title').addEventListener('input',()=>{if(!editing&&!slugTouched)$('#f-slug').value=slugify($('#f-title').value)});
-$('#f-slug').addEventListener('input',()=>{slugTouched=true});
+['#f-mt','#f-md'].forEach(s=>Q(s).addEventListener('input',counters));
+Q('#f-title').addEventListener('input',()=>{if(!editing&&!slugTouched)Q('#f-slug').value=slugify(Q('#f-title').value)});
+Q('#f-slug').addEventListener('input',()=>{slugTouched=true});
 const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
-function showImg(src){$('#imgbox').innerHTML=src?`<img alt="" src="${esc(src)}">`:'no image'}
-$('#btn-img').onclick=()=>$('#f-img').click();
-$('#f-img').onchange=async()=>{const f=$('#f-img').files[0];if(!f)return;pendingImg=await resize(f,1200,630,true);showImg(URL.createObjectURL(pendingImg))};
-$('#btn-noimg').onclick=()=>{pendingImg=null;currentImage='';$('#f-img').value='';showImg('')};
+function showImg(src){Q('#imgbox').innerHTML=src?`<img alt="" src="${esc(src)}">`:'no image'}
+Q('#btn-img').onclick=()=>Q('#f-img').click();
+Q('#f-img').onchange=async()=>{const f=Q('#f-img').files[0];if(!f)return;pendingImg=await resize(f,1200,630,true);showImg(URL.createObjectURL(pendingImg))};
+Q('#btn-noimg').onclick=()=>{pendingImg=null;currentImage='';Q('#f-img').value='';showImg('')};
 function resetForm(){
   editing=null;slugTouched=false;pendingImg=null;currentImage='';
-  ['#f-title','#f-sub','#f-slug','#f-mt','#f-mk','#f-md','#f-alt'].forEach(s=>$(s).value='');
-  $('#f-au').value=localStorage.getItem('sb_author')||'';$('#f-ad').value=localStorage.getItem('sb_designation')||'';$('#f-dt').value=today();
-  $('#f-slug').readOnly=false;$('#slug-note').textContent='';quill.setContents([]);if(srcMode)$('#btn-src').click();
-  showImg('');$('#f-img').value='';$('#mode').textContent='New post';$('#btn-pub').textContent='Publish';counters();
+  ['#f-title','#f-sub','#f-slug','#f-mt','#f-mk','#f-md','#f-alt'].forEach(s=>Q(s).value='');
+  Q('#f-au').value=localStorage.getItem('sb_author')||'';Q('#f-ad').value=localStorage.getItem('sb_designation')||'';Q('#f-dt').value=today();
+  Q('#f-slug').readOnly=false;Q('#slug-note').textContent='';ED().summernote('code','');
+  showImg('');Q('#f-img').value='';Q('#mode').textContent='New post';Q('#btn-pub').textContent='Publish';counters();
 }
-$('#btn-new').onclick=()=>{resetForm();clearLog()};
+Q('#btn-new').onclick=()=>{resetForm();clearLog()};
 
 /* ---------- publish ---------- */
 async function rebuildIndexes(posts,msg){
@@ -314,15 +324,15 @@ async function rebuildIndexes(posts,msg){
   await ghPut('blog/index.html',toB64(listHTML(posts)),msg);
   await ghPut('sitemap.xml',toB64(sitemapXML(posts)),msg);
 }
-$('#btn-pub').onclick=async()=>{
+Q('#btn-pub').onclick=async()=>{
   clearLog();if(needToken())return;
-  const f={title:$('#f-title').value.trim(),subtitle:$('#f-sub').value.trim(),slug:slugify($('#f-slug').value)||slugify($('#f-title').value),content:getContent(),
-    metaTitle:$('#f-mt').value.trim(),metaKeywords:$('#f-mk').value.trim(),metaDescription:$('#f-md').value.trim(),
-    author:$('#f-au').value.trim(),designation:$('#f-ad').value.trim(),imageAlt:$('#f-alt').value.trim(),date:$('#f-dt').value||today()};
+  const f={title:Q('#f-title').value.trim(),subtitle:Q('#f-sub').value.trim(),slug:slugify(Q('#f-slug').value)||slugify(Q('#f-title').value),content:getContent(),
+    metaTitle:Q('#f-mt').value.trim(),metaKeywords:Q('#f-mk').value.trim(),metaDescription:Q('#f-md').value.trim(),
+    author:Q('#f-au').value.trim(),designation:Q('#f-ad').value.trim(),imageAlt:Q('#f-alt').value.trim(),date:Q('#f-dt').value||today()};
   if(!f.title){log('Title is required.','err');return}
   if(!f.content){log('Content is empty.','err');return}
   if(!f.slug)f.slug='post-'+Date.now().toString(36);
-  const btn=$('#btn-pub');btn.disabled=true;
+  const btn=Q('#btn-pub');btn.disabled=true;
   try{
     let posts=await readJSON('blog/posts.json',[]);
     if(!editing&&posts.some(p=>p.slug===f.slug)) throw new Error('A post with this URL name already exists. Change the URL name or edit that post from "All posts".');
@@ -342,7 +352,7 @@ $('#btn-pub').onclick=async()=>{
     localStorage.setItem('sb_author',f.author);localStorage.setItem('sb_designation',f.designation);
     const url=siteUrl()+'blog/'+f.slug+'.html';
     log('Published. It goes live in 1 to 2 minutes: '+url,'ok');
-    editing=f.slug;currentImage=f.image;pendingImg=null;$('#f-slug').value=f.slug;$('#f-slug').readOnly=true;$('#mode').textContent='Editing: '+f.slug;$('#btn-pub').textContent='Update';
+    editing=f.slug;currentImage=f.image;pendingImg=null;Q('#f-slug').value=f.slug;Q('#f-slug').readOnly=true;Q('#mode').textContent='Editing: '+f.slug;Q('#btn-pub').textContent='Update';
     loadList();
   }catch(e){log(e.message,'err')}
   btn.disabled=false;
@@ -350,27 +360,27 @@ $('#btn-pub').onclick=async()=>{
 
 /* ---------- list / edit / delete ---------- */
 async function loadList(){
-  if(!cfg.token){$('#rows').innerHTML='<tr><td colspan="3">Connect to GitHub to see your posts.</td></tr>';return}
+  if(!cfg.token){Q('#rows').innerHTML='<tr><td colspan="3">Connect to GitHub to see your posts.</td></tr>';return}
   try{
     const posts=await readJSON('blog/posts.json',[]);
-    $('#rows').innerHTML=posts.length?'':'<tr><td colspan="3">No posts yet.</td></tr>';
+    Q('#rows').innerHTML=posts.length?'':'<tr><td colspan="3">No posts yet.</td></tr>';
     posts.forEach(p=>{
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${esc(p.title)}<div class="count">${esc(p.slug)}.html</div></td><td>${esc(p.date)}</td><td><div class="a"><button type="button" data-e="${esc(p.slug)}">Edit</button><a class="b" target="_blank" rel="noopener" href="${esc(siteUrl()+'blog/'+p.slug+'.html')}">View</a><button type="button" class="danger" data-d="${esc(p.slug)}">Delete</button></div></td>`;
-      $('#rows').appendChild(tr);
+      Q('#rows').appendChild(tr);
     });
-  }catch(e){$('#rows').innerHTML='<tr><td colspan="3">'+esc(e.message)+'</td></tr>'}
+  }catch(e){Q('#rows').innerHTML='<tr><td colspan="3">'+esc(e.message)+'</td></tr>'}
 }
-$('#rows').addEventListener('click',async e=>{
+Q('#rows').addEventListener('click',async e=>{
   const b=e.target.closest('button');if(!b)return;clearLog();
   if(b.dataset.e){
     try{const p=await readJSON(`blog/data/${b.dataset.e}.json`,null);if(!p)throw new Error('Post data not found.');
       resetForm();editing=p.slug;
-      $('#f-title').value=p.title||'';$('#f-sub').value=p.subtitle||'';$('#f-slug').value=p.slug;$('#f-slug').readOnly=true;$('#slug-note').textContent='The URL name cannot change after publishing.';
-      quill.clipboard.dangerouslyPasteHTML(p.content||'');
-      $('#f-mt').value=p.metaTitle||'';$('#f-mk').value=p.metaKeywords||'';$('#f-md').value=p.metaDescription||'';$('#f-au').value=p.author||'';$('#f-ad').value=p.designation||'';$('#f-dt').value=p.date||today();$('#f-alt').value=p.imageAlt||'';
+      Q('#f-title').value=p.title||'';Q('#f-sub').value=p.subtitle||'';Q('#f-slug').value=p.slug;Q('#f-slug').readOnly=true;Q('#slug-note').textContent='The URL name cannot change after publishing.';
+      ED().summernote('code',p.content||'');
+      Q('#f-mt').value=p.metaTitle||'';Q('#f-mk').value=p.metaKeywords||'';Q('#f-md').value=p.metaDescription||'';Q('#f-au').value=p.author||'';Q('#f-ad').value=p.designation||'';Q('#f-dt').value=p.date||today();Q('#f-alt').value=p.imageAlt||'';
       currentImage=p.image||'';showImg(currentImage?siteUrl()+currentImage:'');
-      $('#mode').textContent='Editing: '+p.slug;$('#btn-pub').textContent='Update';counters();showTab('edit');
+      Q('#mode').textContent='Editing: '+p.slug;Q('#btn-pub').textContent='Update';counters();showTab('edit');
     }catch(err){log(err.message,'err')}
   }
   if(b.dataset.d){
@@ -386,10 +396,10 @@ $('#rows').addEventListener('click',async e=>{
 });
 
 /* ---------- tabs / start ---------- */
-function showTab(t){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));$('#tab-edit').hidden=t!=='edit';$('#tab-list').hidden=t!=='list';if(t==='list')loadList()}
+function showTab(t){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));Q('#tab-edit').hidden=t!=='edit';Q('#tab-list').hidden=t!=='list';if(t==='list')loadList()}
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 setStatus();fillConn();resetForm();
-if(!cfg.token)$('#connect').hidden=false;else loadList();
+if(!cfg.token)Q('#connect').hidden=false;else loadList();
 </script>
 </body>
 </html>
