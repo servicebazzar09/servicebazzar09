@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://servicebazzar09.github.io/servicebazzar09/sitemap.xml

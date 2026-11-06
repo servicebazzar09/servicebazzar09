@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Service Bazzar – Business directory for Jaipur</title>
+<meta name="description" content="Service Bazzar is a local business directory. Browse Jaipur categories such as jewellery shops, real estate, institutes, astrologers, car hire, chartered accountants, physiotherapists and travel agents.">
+<link rel="canonical" href="https://servicebazzar09.github.io/servicebazzar09/">
+<meta property="og:title" content="Service Bazzar – Business directory for Jaipur">
+<meta property="og:description" content="Browse local business categories in Jaipur and add your own listing.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Service Bazzar",
+      "url": "https://www.servicebazzar.com/"
+    },
+    {
+      "@type": "ItemList",
+      "name": "Service Bazzar categories in Jaipur",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Jewellery shops in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/jewellery-shop"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Real estate in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/real-estate"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Institutes in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/institute"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Astrologers in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/astrologers"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Car hire in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/car-hire"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Chartered accountants in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/chartered--caccountanta"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Physiotherapists in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/physiotherapists"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "Travel agents in Jaipur",
+          "url": "https://www.servicebazzar.com/jaipur/travel-agent"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#F6F4FA; --surface:#FFFFFF; --ink:#1B1740; --muted:#5B5878; --line:#DAD4E8;
+  --rose:#C2335C; --rose-soft:#F6DCE5; --sand:#F1C46B; --indigo-soft:#E4E1F4;
+  --head:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Hind","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#14112E; --surface:#1D1941; --ink:#F1EEFB; --muted:#B3AED0; --line:#352F63;
+    --rose:#F0769B; --rose-soft:#3A2147; --sand:#F1C46B; --indigo-soft:#262152;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.65;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{font-family:var(--head);font-weight:800;font-size:1.35rem;text-decoration:none;letter-spacing:-.01em}
+.brand i{font-style:normal;color:var(--rose)}
+.top a.cta{font-weight:600;text-decoration:none;border:2px solid var(--ink);padding:8px 18px;border-radius:999px;font-size:.95rem}
+.top a.cta:hover{background:var(--ink);color:var(--bg)}
+
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;padding:56px 0 72px}
+.hero h1{font-family:var(--head);font-weight:800;font-size:clamp(2.3rem,5.4vw,4rem);line-height:1.04;letter-spacing:-.025em;margin:0 0 20px}
+.hero p{color:var(--muted);max-width:34em;margin:0 0 30px;font-size:1.1rem}
+.btns{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-block;font-weight:600;text-decoration:none;padding:13px 26px;border-radius:999px}
+.btn.primary{background:var(--rose);color:#fff}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border:2px solid var(--line)}
+.btn.ghost:hover{border-color:var(--ink)}
+
+/* jharokha-style arch stack */
+.arches{position:relative;aspect-ratio:4/5;max-width:340px;margin-left:auto;width:100%}
+.arches span{position:absolute;left:50%;transform:translateX(-50%);border-radius:999px 999px 0 0;display:block}
+.arches .a1{width:100%;height:100%;background:var(--rose)}
+.arches .a2{width:74%;height:80%;bottom:0;background:var(--sand)}
+.arches .a3{width:48%;height:58%;bottom:0;background:var(--indigo-soft)}
+.arches .a3::after{content:"";position:absolute;left:50%;top:22%;width:34%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:var(--ink);opacity:.9}
+.arches .a1,.arches .a2,.arches .a3{bottom:0}
+
+section{padding:20px 0 72px}
+h2{font-family:var(--head);font-weight:700;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:-.02em;line-height:1.15;margin:0 0 10px}
+.lede{color:var(--muted);margin:0 0 36px;max-width:40em}
+
+ul.tiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}
+.tile{display:flex;gap:18px;align-items:center;text-decoration:none;padding:20px 4px;border-top:1px solid var(--line)}
+ul.tiles li:nth-last-child(-n+2) .tile{border-bottom:1px solid var(--line)}
+.arch{flex:none;width:58px;height:68px;display:grid;place-items:end center;padding-bottom:12px;font-size:1.6rem;background:var(--rose-soft);border-radius:999px 999px 8px 8px;transition:background .2s}
+.tile-text{display:flex;flex-direction:column}
+.tile strong{font-family:var(--head);font-size:1.18rem;font-weight:700;line-height:1.25}
+.tile-text span{color:var(--muted);font-size:.97rem;line-height:1.45;margin-top:2px}
+.tile:hover strong{color:var(--rose);text-decoration:underline;text-underline-offset:4px}
+.tile:hover .arch{background:var(--sand)}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--line);border-radius:20px 20px 6px 6px;padding:26px 24px}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--bg);font-family:var(--head);font-weight:700;margin-bottom:14px}
+.steps h3{font-family:var(--head);font-size:1.15rem;margin:0 0 6px}
+.steps p{margin:0;color:var(--muted);font-size:1rem}
+
+.about{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.about p{margin:0 0 14px;color:var(--muted)}
+.about a{color:var(--rose);font-weight:600}
+
+footer{border-top:1px solid var(--line);padding:32px 0 44px;color:var(--muted);font-size:.95rem}
+footer .row{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{text-decoration:none;font-weight:500}
+footer a:hover{text-decoration:underline}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;gap:36px;padding-top:28px}
+  .arches{margin:0;max-width:240px}
+  ul.tiles{grid-template-columns:1fr}
+  ul.tiles li:nth-last-child(2) .tile{border-bottom:0}
+  .steps{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./">Service<i>Bazzar</i></a>
+    <a class="cta" href="https://www.servicebazzar.com/">Visit website</a>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Local businesses in Jaipur, in one directory.</h1>
+        <p><a href="https://www.servicebazzar.com/" style="font-weight:600">Service Bazzar</a> is a business listing platform. Pick a category to see shops, clinics, institutes and service providers in Jaipur, with contact details on each listing.</p>
+        <div class="btns">
+          <a class="btn primary" href="#categories">Browse categories</a>
+          <a class="btn ghost" href="https://www.servicebazzar.com/">Open Service Bazzar</a>
+        </div>
+      </div>
+      <div class="arches" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+    </div>
+
+    <section id="categories">
+      <h2>Main categories in Jaipur</h2>
+      <p class="lede">Each category opens its listing page on Service Bazzar.</p>
+      <ul class="tiles">
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/jewellery-shop">
+        <span class="arch" aria-hidden="true">💍</span>
+        <span class="tile-text"><strong>Jewellery shops in Jaipur</strong><span>Gold, silver and diamond jewellery shops across Jaipur.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/real-estate">
+        <span class="arch" aria-hidden="true">🏠</span>
+        <span class="tile-text"><strong>Real estate in Jaipur</strong><span>Property dealers and consultants for flats, plots, shops and rentals.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/institute">
+        <span class="arch" aria-hidden="true">🎓</span>
+        <span class="tile-text"><strong>Institutes in Jaipur</strong><span>Coaching centres, skill courses and training institutes.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/astrologers">
+        <span class="arch" aria-hidden="true">🔮</span>
+        <span class="tile-text"><strong>Astrologers in Jaipur</strong><span>Astrologers in Jaipur for kundli, horoscope and consultations.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/car-hire">
+        <span class="arch" aria-hidden="true">🚗</span>
+        <span class="tile-text"><strong>Car hire in Jaipur</strong><span>Taxis and self-drive cars for city trips and outstation travel.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/chartered--caccountanta">
+        <span class="arch" aria-hidden="true">📒</span>
+        <span class="tile-text"><strong>Chartered accountants in Jaipur</strong><span>Chartered accountants for tax filing, GST and audits.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/physiotherapists">
+        <span class="arch" aria-hidden="true">🩺</span>
+        <span class="tile-text"><strong>Physiotherapists in Jaipur</strong><span>Physiotherapy clinics and home-visit physiotherapists.</span></span>
+      </a></li>
+      <li><a class="tile" href="https://www.servicebazzar.com/jaipur/travel-agent">
+        <span class="arch" aria-hidden="true">🧳</span>
+        <span class="tile-text"><strong>Travel agents in Jaipur</strong><span>Travel agents for tour packages, tickets and hotel bookings.</span></span>
+      </a></li>
+      </ul>
+    </section>
+
+    <section id="how">
+      <h2>How a listing works</h2>
+      <p class="lede">For business owners who want customers to find them online.</p>
+      <ol class="steps">
+        <li><h3>Add the business</h3><p>Enter the name, category, address, phone number and working hours.</p></li>
+        <li><h3>Appear in the category</h3><p>The listing shows up on its city and category page, such as Jaipur real estate or Jaipur car hire.</p></li>
+        <li><h3>Get contacted</h3><p>Customers read the details and call or message the business directly.</p></li>
+      </ol>
+    </section>
+
+    <section id="about">
+      <div class="about">
+        <div><h2>About Service Bazzar</h2></div>
+        <div>
+          <p>Service Bazzar lists local businesses by city and category, so a person searching for a jeweller, a CA, a physiotherapist or a travel agent reaches the right page in a couple of taps.</p>
+          <p>The platform currently covers Jaipur. See the full site at <a href="https://www.servicebazzar.com/">servicebazzar.com</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="row">
+      <span>© Service Bazzar</span>
+      <nav aria-label="Footer"><a href="https://www.servicebazzar.com/">Home</a> &nbsp;·&nbsp; <a href="#categories">Categories</a> &nbsp;·&nbsp; <a href="#how">Add a listing</a></nav>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

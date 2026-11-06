@@ -1,0 +1,50 @@
+[
+  {
+    "category": "Jewellery shops",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/jewellery-shop",
+    "description": "Gold, silver and diamond jewellery shops across Jaipur."
+  },
+  {
+    "category": "Real estate",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/real-estate",
+    "description": "Property dealers and consultants for flats, plots, shops and rentals."
+  },
+  {
+    "category": "Institutes",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/institute",
+    "description": "Coaching centres, skill courses and training institutes."
+  },
+  {
+    "category": "Astrologers",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/astrologers",
+    "description": "Astrologers in Jaipur for kundli, horoscope and consultations."
+  },
+  {
+    "category": "Car hire",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/car-hire",
+    "description": "Taxis and self-drive cars for city trips and outstation travel."
+  },
+  {
+    "category": "Chartered accountants",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/chartered--caccountanta",
+    "description": "Chartered accountants for tax filing, GST and audits."
+  },
+  {
+    "category": "Physiotherapists",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/physiotherapists",
+    "description": "Physiotherapy clinics and home-visit physiotherapists."
+  },
+  {
+    "category": "Travel agents",
+    "city": "Jaipur",
+    "url": "https://www.servicebazzar.com/jaipur/travel-agent",
+    "description": "Travel agents for tour packages, tickets and hotel bookings."
+  }
+]
