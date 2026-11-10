@@ -11,7 +11,7 @@ This repository holds the project's public landing page and a plain-data copy of
 - [Institutes in Jaipur](https://www.servicebazzar.com/jaipur/institute) — Coaching centres, skill courses and training institutes.
 - [Astrologers in Jaipur](https://www.servicebazzar.com/jaipur/astrologers) — Astrologers in Jaipur for kundli, horoscope and consultations.
 - [Car hire in Jaipur](https://www.servicebazzar.com/jaipur/car-hire) — Taxis and self-drive cars for city trips and outstation travel.
-- [Chartered accountants in Jaipur](https://www.servicebazzar.com/jaipur/chartered--caccountanta) — Chartered accountants for tax filing, GST and audits.
+- [Chartered accountants in Jaipur](https://www.servicebazzar.com/jaipur/chartered-accountant-ca) — Chartered accountants for tax filing, GST and audits.
 - [Physiotherapists in Jaipur](https://www.servicebazzar.com/jaipur/physiotherapists) — Physiotherapy clinics and home-visit physiotherapists.
 - [Travel agents in Jaipur](https://www.servicebazzar.com/jaipur/travel-agent) — Travel agents for tour packages, tickets and hotel bookings.
 
@@ -22,6 +22,9 @@ This repository holds the project's public landing page and a plain-data copy of
 | `index.html` | Landing page, published with GitHub Pages |
 | `categories.json` | Category index in JSON |
 | `categories.csv` | Same index in CSV, for spreadsheets |
+| `blog/` | Blog listing page and published articles |
+| `admin/index.html` | Private writing panel for the site owner |
+| `assets/blog.css` | Styles for the blog pages |
 | `sitemap.xml`, `robots.txt` | Crawling files for the Pages site |
 
 ## Add your business
