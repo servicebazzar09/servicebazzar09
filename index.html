@@ -4,10 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Service Bazzar – Business directory for Jaipur</title>
-<meta name="description" content="Service Bazzar is a local business directory. Browse Jaipur categories such as jewellery shops, real estate, institutes, astrologers, car hire, chartered accountants, physiotherapists and travel agents.">
+<meta name="description" content="Browse Jaipur business categories: jewellery shops, real estate, institutes, astrologers, car hire, CAs, physiotherapists and travel agents.">
 <link rel="canonical" href="https://servicebazzar09.github.io/servicebazzar09/">
 <meta property="og:title" content="Service Bazzar – Business directory for Jaipur">
-<meta property="og:description" content="Browse local business categories in Jaipur and add your own listing.">
+<meta property="og:description" content="Browse Jaipur business categories: jewellery shops, real estate, institutes, astrologers, car hire, CAs, physiotherapists and travel agents.">
+<meta property="og:url" content="https://servicebazzar09.github.io/servicebazzar09/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Service Bazzar – Business directory for Jaipur">
+<meta name="twitter:description" content="Browse Jaipur business categories: jewellery shops, real estate, institutes, astrologers, car hire, CAs, physiotherapists and travel agents.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,6 +76,43 @@
           "position": 8,
           "name": "Travel agents in Jaipur",
           "url": "https://www.servicebazzar.com/jaipur/travel-agent"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Service Bazzar?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Service Bazzar is a local business directory. People open a category for their city, read the listings and contact the business directly, and businesses add listings so customers can reach them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which city does it cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jaipur at the moment. The categories on this page are jewellery shops, real estate, institutes, astrologers, car hire, chartered accountants, physiotherapists and travel agents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can a business get listed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Open servicebazzar.com and create a listing with the business name, category, address, phone number and working hours. The listing then appears on its city and category page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this page the full directory?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. This page is an overview with links to each category. The full listings and contact details are on servicebazzar.com."
+          }
         }
       ]
     }
@@ -154,6 +195,11 @@ ul.posts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:r
 .steps h3{font-family:var(--head);font-size:1.15rem;margin:0 0 6px}
 .steps p{margin:0;color:var(--muted);font-size:1rem}
 
+.faq{max-width:760px;margin-top:22px}
+.faq details{border-top:1px solid var(--line);padding:16px 0}
+.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-family:var(--head);font-weight:700;font-size:1.1rem;line-height:1.35}
+.faq details p{margin:10px 0 0;color:var(--muted)}
 .about{display:grid;grid-template-columns:1fr 1fr;gap:48px}
 .about p{margin:0 0 14px;color:var(--muted)}
 .about a{color:var(--rose);font-weight:600}
@@ -255,9 +301,21 @@ footer a:hover{text-decoration:underline}
       <div class="about">
         <div><h2>About Service Bazzar</h2></div>
         <div>
-          <p>Service Bazzar lists local businesses by city and category, so a person searching for a jeweller, a CA, a physiotherapist or a travel agent reaches the right page in a couple of taps.</p>
-          <p>The platform currently covers Jaipur. See the full site at <a href="https://www.servicebazzar.com/">servicebazzar.com</a>.</p>
+          <p>Most local searches start with a small, urgent problem. A family in Vaishali Nagar needs a <a href="https://www.servicebazzar.com/jaipur/car-hire">car on hire</a> for a weekend trip to Pushkar. Someone who just moved to Jaipur has a GST return due in a week and no <a href="https://www.servicebazzar.com/jaipur/chartered-accountant-ca">chartered accountant</a> to call. A parent wants a <a href="https://www.servicebazzar.com/jaipur/physiotherapists">physiotherapist</a> who can visit home after a knee surgery. Scrolling through scattered pages and old phone numbers eats the one thing these people don't have: time.</p>
+          <p>Service Bazzar puts those searches in one place. Each category has its own page for Jaipur: jewellery shops, property dealers, institutes, astrologers, car hire, CAs, physiotherapists and travel agents. Open a page, read the listing details and call the business directly.</p>
+          <p>Business owners get the same convenience in reverse. A showroom in Malviya Nagar or a clinic in Mansarovar can add its name, address, phone number and timings once, and appear on the page where customers already search.</p>
+          <p>This page is a short overview with the main categories and a few articles. Full listings and contact details are on <a href="https://www.servicebazzar.com/">servicebazzar.com</a>.</p>
         </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>Common questions</h2>
+      <div class="faq">
+        <details><summary>What is Service Bazzar?</summary><p>Service Bazzar is a local business directory. People open a category for their city, read the listings and contact the business directly, and businesses add listings so customers can reach them.</p></details>
+        <details><summary>Which city does it cover?</summary><p>Jaipur at the moment. The categories on this page are jewellery shops, real estate, institutes, astrologers, car hire, chartered accountants, physiotherapists and travel agents.</p></details>
+        <details><summary>How can a business get listed?</summary><p>Open servicebazzar.com and create a listing with the business name, category, address, phone number and working hours. The listing then appears on its city and category page.</p></details>
+        <details><summary>Is this page the full directory?</summary><p>No. This page is an overview with links to each category. The full listings and contact details are on servicebazzar.com.</p></details>
       </div>
     </section>
   </main>
@@ -265,7 +323,7 @@ footer a:hover{text-decoration:underline}
   <footer>
     <div class="row">
       <span>© Service Bazzar</span>
-      <nav aria-label="Footer"><a href="https://www.servicebazzar.com/">Home</a> &nbsp;·&nbsp; <a href="blog/">Blog</a> &nbsp;·&nbsp; <a href="#categories">Categories</a> &nbsp;·&nbsp; <a href="#how">Add a listing</a></nav>
+      <nav aria-label="Footer"><a href="https://www.servicebazzar.com/">Service Bazzar</a> &nbsp;·&nbsp; <a href="blog/">Blog</a> &nbsp;·&nbsp; <a href="#categories">Categories</a> &nbsp;·&nbsp; <a href="#how">Add a listing</a></nav>
     </div>
   </footer>
 </div>
